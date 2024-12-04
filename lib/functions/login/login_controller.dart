@@ -6,20 +6,20 @@ import 'package:email_validator/email_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 import '../../providers/auth_provider.dart';
-import '../../providers/push_notifications_provider.dart';
+
 class LoginController {
   late BuildContext context;
   late Function refresh;
   late final SimpleFontelicoProgressDialog _dialog =
-  SimpleFontelicoProgressDialog(context: context);
+      SimpleFontelicoProgressDialog(context: context);
   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   void init(BuildContext context, Function() refresh) {
     this.context = context;
     this.refresh = refresh;
-
   }
+
   Future<void> campos() async {
     loading();
     String email = emailController.text.trim();
@@ -27,22 +27,22 @@ class LoginController {
     if (bemail) {
       saveTypeUser('User');
       login();
+    } else {
+      _dialog.hide();
+      mensaje('Correo no valido', AnimatedSnackBarType.error);
     }
-    else
-      {
-        _dialog.hide();
-        mensaje('Correo no valido', AnimatedSnackBarType.error);
-      }
   }
+
   Future<void> loading() async {
     _dialog.show(
         message: 'Verificando...',
         type: SimpleFontelicoProgressDialogType.phoenix);
   }
+
   Future<void> login() async {
-    Navigator.pushNamedAndRemoveUntil(
-        context, 'principals', (route) => false);
+    Navigator.pushNamedAndRemoveUntil(context, 'principals', (route) => false);
   }
+
   void mensaje(String mensaje, var type) {
     AnimatedSnackBar.material(
       mensaje,
@@ -54,6 +54,4 @@ class LoginController {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('type', s);
   }
-
-
 }
